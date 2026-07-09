@@ -95,7 +95,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="lg:hidden"
+            className="relative z-10 lg:hidden"
           >
             <div className="glass mx-4 mt-2 overflow-hidden rounded-2xl p-3 shadow-card">
               {nav.map((item) => (
