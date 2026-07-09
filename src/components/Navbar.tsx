@@ -102,7 +102,12 @@ export function Navbar() {
                 <a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.querySelector(item.href);
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                    setOpen(false);
+                  }}
                   className="block rounded-xl px-4 py-3 text-base font-medium text-ink-800 transition-colors hover:bg-ink-900/5"
                 >
                   {item.label}
