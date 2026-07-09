@@ -28,9 +28,9 @@ export default function App() {
       <main id="contenido">
         <Hero />
         <TrustBar />
-        <Features />
-        <Portfolio />
         <Process />
+        <Portfolio />
+        <Features />
         <Benefits />
         <Testimonials />
         <Services />
