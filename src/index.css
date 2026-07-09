@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+
+  /* Forest — verde bosque profundo (dark) */
+  --color-forest-950: #16211c;
+  --color-forest-900: #1f2d27;
+  --color-forest-800: #283a31;
+  --color-forest-700: #2e4538;
+  --color-forest-600: #3a5a48;
+  --color-forest-500: #4a6b5a;
+  --color-forest-400: #6b8a78;
+
+  /* Sage — acentos suaves verdes claros */
+  --color-sage-300: #b8c9b4;
+  --color-sage-200: #d4ddcc;
+  --color-sage-100: #e4ebe0;
+
+  /* Bone — cálidos claros (fondos) */
+  --color-bone-50: #faf7f2;
+  --color-bone-100: #f2eee6;
+  --color-bone-200: #e5ded2;
+  --color-bone-300: #d6cdbd;
+
+  /* Ink — texto (tinte verde) */
+  --color-ink-950: #121916;
+  --color-ink-900: #1a2421;
+  --color-ink-800: #2a3530;
+  --color-ink-700: #3a4a42;
+  --color-ink-600: #53665b;
+
+  /* Stone — muted text */
+  --color-stone-500: #71717a;
+  --color-stone-600: #52525b;
+
+  /* Brass — ahora alias de Sand (terracota premium cálido México) */
+  --color-brass-300: #d4b89c;
+  --color-brass-400: #b89a7a;
+  --color-brass-500: #a88870;
+  --color-brass-600: #8b6e58;
+
+  /* Sand — terracota premium cálido (México) */
+  --color-sand-100: #f5e9dc;
+  --color-sand-300: #d4b89c;
+  --color-sand-400: #b89a7a;
+  --color-sand-500: #a88870;
+  --color-sand-600: #8b6e58;
+  --color-sand-700: #6e5644;
+
+  /* WhatsApp */
+  --color-wa: #1ba35f;
+
+  --shadow-soft: 0 1px 2px rgba(10, 10, 11, 0.04),
+    0 10px 26px -14px rgba(10, 10, 11, 0.2);
+  --shadow-card: 0 2px 8px rgba(10, 10, 11, 0.05),
+    0 30px 64px -30px rgba(10, 10, 11, 0.38);
+  --shadow-glow: 0 14px 44px -10px rgba(74, 107, 90, 0.5);
+
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-float-slow: float 15s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-shimmer: shimmer 3.4s linear infinite;
+  --animate-pulse-ring: pulseRing 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  --animate-spin-slow: spinSlow 26s linear infinite;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--color-bone-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--color-brass-500);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brass-500);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bone-100);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-stone-500);
+    border-radius: 999px;
+    border: 3px solid var(--color-bone-100);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brass-500);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-22px);
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.82);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer components {
+  .glass {
+    background: color-mix(in srgb, var(--color-bone-50) 78%, transparent);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid color-mix(in srgb, var(--color-bone-200) 85%, transparent);
+  }
+  .glass-dark {
+    background: color-mix(in srgb, var(--color-forest-950) 55%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid color-mix(in srgb, #fff 9%, transparent);
+  }
+  .text-gradient-brass {
+    background: linear-gradient(
+      100deg,
+      var(--color-sand-300),
+      var(--color-sand-500) 55%,
+      var(--color-sand-300)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .accent-underline {
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-sand-500);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+  }
+  .shadow-ivory-glow {
+    box-shadow: 0 8px 24px -8px rgba(168, 136, 112, 0.5),
+      0 2px 8px rgba(31, 45, 39, 0.15);
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-brass-500) 32%, transparent);
+    background: color-mix(in srgb, var(--color-brass-500) 10%, transparent);
+    padding: 0.45rem 0.95rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-brass-600);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
