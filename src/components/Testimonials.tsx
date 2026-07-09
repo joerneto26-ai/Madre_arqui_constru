@@ -1,9 +1,55 @@
+import { useEffect, useRef, useState } from "react";
 import { SectionHeading } from "./ui/SectionHeading";
-import { Reveal, StaggerGroup, StaggerItem } from "./ui/Reveal";
-import { Quote, Star } from "./icons";
+import { Reveal } from "./ui/Reveal";
+import { ArrowRight, Quote, Star } from "./icons";
 import { testimonials } from "@/lib/content";
+import { cn } from "@/utils/cn";
+
+function Card({ t }: { t: (typeof testimonials)[number] }) {
+  return (
+    <figure className="group relative h-full overflow-hidden rounded-2xl glass-dark p-7 transition-colors duration-300 hover:border-brass-400/30">
+      <Quote className="h-8 w-8 text-brass-400/50" />
+      <div className="mt-3 flex gap-0.5 text-brass-300">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} className="h-4 w-4" />
+        ))}
+      </div>
+      <blockquote className="mt-4 text-[0.98rem] leading-relaxed text-bone-100/90">
+        “{t.quote}”
+      </blockquote>
+      <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+        <img
+          src={t.avatar}
+          alt=""
+          loading="lazy"
+          className="h-11 w-11 rounded-full object-cover ring-2 ring-brass-400/30"
+        />
+        <div>
+          <p className="font-medium text-bone-50">{t.name}</p>
+          <p className="text-xs text-bone-200/70">{t.role}</p>
+        </div>
+      </figcaption>
+    </figure>
+  );
+}
 
 export function Testimonials() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const idx = Math.round(
+        el.scrollLeft / (el.scrollWidth / testimonials.length)
+      );
+      setActiveIndex(idx);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section
       id="testimonios"
@@ -32,35 +78,41 @@ export function Testimonials() {
           </div>
         </Reveal>
 
-        <StaggerGroup className="mt-14 grid gap-5 sm:grid-cols-2">
+        {/* Mobile carousel */}
+        <div
+          ref={scrollRef}
+          className="mt-14 flex snap-x snap-mandatory gap-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:hidden"
+        >
           {testimonials.map((t) => (
-            <StaggerItem key={t.name}>
-              <figure className="group relative h-full overflow-hidden rounded-2xl glass-dark p-7 transition-colors duration-300 hover:border-brass-400/30">
-                <Quote className="h-8 w-8 text-brass-400/50" />
-                <div className="mt-3 flex gap-0.5 text-brass-300">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4" />
-                  ))}
-                </div>
-                <blockquote className="mt-4 text-[0.98rem] leading-relaxed text-bone-100/90">
-                  “{t.quote}”
-                </blockquote>
-                <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
-                  <img
-                    src={t.avatar}
-                    alt=""
-                    loading="lazy"
-                    className="h-11 w-11 rounded-full object-cover ring-2 ring-brass-400/30"
-                  />
-                  <div>
-                    <p className="font-medium text-bone-50">{t.name}</p>
-                    <p className="text-xs text-bone-200/70">{t.role}</p>
-                  </div>
-                </figcaption>
-              </figure>
-            </StaggerItem>
+            <div
+              key={t.name}
+              className="w-[80vw] shrink-0 snap-center"
+            >
+              <Card t={t} />
+            </div>
           ))}
-        </StaggerGroup>
+        </div>
+
+        {/* Dots + arrow (mobile only) */}
+        <div className="mt-6 flex items-center justify-center gap-2 sm:hidden">
+          {testimonials.map((_, i) => (
+            <span
+              key={i}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300",
+                activeIndex === i ? "w-6 bg-sand-500" : "w-2 bg-bone-200/40"
+              )}
+            />
+          ))}
+          <ArrowRight className="ml-1 h-4 w-4 animate-nudge-right text-sand-500" />
+        </div>
+
+        {/* Desktop grid */}
+        <div className="mt-14 hidden gap-5 sm:grid sm:grid-cols-2">
+          {testimonials.map((t) => (
+            <Card key={t.name} t={t} />
+          ))}
+        </div>
       </div>
     </section>
   );
