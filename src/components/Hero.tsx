@@ -66,7 +66,6 @@ export function Hero() {
           style={{ objectPosition: "65% center" }}
           autoPlay
           muted
-          loop
           playsInline
           preload="auto"
           poster={HERO_POSTER}
