@@ -1,57 +1,23 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "./ui/Button";
 import { Reveal } from "./ui/Reveal";
 import { ArrowRight, Star, Whatsapp } from "./icons";
 import { avatarUrl, brand, trustAvatars, waLink } from "@/lib/content";
 
-const HERO_POSTER = "/images/hero-poster.webp";
-const HERO_VIDEO_DESKTOP = "/videos/hero-desktop.mp4";
-const HERO_VIDEO_MOBILE = "/videos/hero-mobile.mp4";
+const HERO_IMG = "/images/hero-casa-mx.jpg";
 
 const WA_MSG =
   "Hola ÁUREA, me gustaría una cotización sin compromiso para mi proyecto en Monterrey.";
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
   const scale = useTransform(scrollYProgress, [0, 1], [1.04, 1.12]);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const saveData =
-      (navigator as Navigator & { connection?: { saveData?: boolean } })
-        .connection?.saveData === true;
-    if (reduce || saveData) {
-      v.autoplay = false;
-      v.pause();
-      return;
-    }
-    const tryPlay = () => {
-      v.play().catch(() => {});
-    };
-    tryPlay();
-    v.addEventListener("canplay", tryPlay, { once: true });
-    const onInteract = () => {
-      tryPlay();
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("scroll", onInteract, true);
-    };
-    window.addEventListener("pointerdown", onInteract, { once: true });
-    window.addEventListener("scroll", onInteract, { once: true, capture: true });
-    return () => {
-      v.removeEventListener("canplay", tryPlay);
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("scroll", onInteract, true);
-    };
-  }, []);
 
   return (
     <section
@@ -60,24 +26,13 @@ export function Hero() {
       className="relative isolate min-h-[100svh] overflow-hidden"
     >
       <motion.div style={{ y, scale }} className="absolute inset-0 -z-10">
-        <video
-          ref={videoRef}
+        <img
+          src={HERO_IMG}
+          alt="Residencia contemporánea mexicana con muros de piedra y tierra en Monterrey, Nuevo León"
           className="h-full w-full object-cover"
           style={{ objectPosition: "65% center" }}
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          poster={HERO_POSTER}
-          aria-hidden="true"
-        >
-          <source
-            src={HERO_VIDEO_MOBILE}
-            type="video/mp4"
-            media="(max-width: 767px)"
-          />
-          <source src={HERO_VIDEO_DESKTOP} type="video/mp4" />
-        </video>
+          fetchPriority="high"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-forest-950/75 via-forest-950/55 to-forest-950/95" />
         <div className="absolute inset-0 bg-gradient-to-r from-forest-950/75 via-forest-950/10 to-transparent" />
       </motion.div>
